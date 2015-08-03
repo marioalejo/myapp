@@ -18,8 +18,29 @@ angular.module('starter', ['ionic'])
   });
 })
 
+
+.config(function($stateProvider, $urlRouterProvider) {
+  $stateProvider
+    .state('tabs', {
+      url: '/tab',
+      abstract: true,
+      templateUrl: 'templates/tabs.html'
+    })
+    .state('tabs.list', {
+      url: '/list',
+      views: {
+        'list-tab' : {
+          templateUrl: 'templates/list.html',
+          controller: 'ListController'
+        }
+      }
+    })
+  $urlRouterProvider.otherwise('/tab/list');
+})
+
+
 .controller('ListController', ['$scope', '$http', function($scope, $http) {
-    $http.get('http://localhost:9100').success(function(data) {
+    $http.get('js/data.json').success(function(data) {
       $scope.artists = data;  
 
       $scope.onItemDelete = function(item) {
@@ -27,7 +48,7 @@ angular.module('starter', ['ionic'])
       }
 
       $scope.doRefresh =function() {
-      $http.get('http://localhost:9100').success(function(data) {
+      $http.get('js/data.json').success(function(data) {
           $scope.artists = data;
           $scope.$broadcast('scroll.refreshComplete'); 
         });
